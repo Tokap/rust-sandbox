@@ -1,0 +1,19 @@
+[package]
+name = "http_connection"
+version = "0.1.0"
+authors = ["Patrick Allen <allenpatrick86@gmail.com>"]
+
+[dependencies]
+rocket = "0.1.6"
+rocket_codegen = "0.1.6"
+rocket_contrib = "0.1.6"
+serde = "0.8.*"
+serde_json = "0.8.*"
+serde_derive = "0.8.*"
+hyper = "0.10.2"
+hyper-rustls = "0.3.0"
+uuid = { version = "0.3.1", features = ["v4"] }
+config = "0.2.0"
+
+[dependencies.url]
+git = "https://github.com/servo/rust-url"
