@@ -1,0 +1,1 @@
+{"rustc":16335750421109157632,"target":5318423021771911680,"profile":11625325535095225723,"local":{"variant":"Precalculated","fields":["0.8.23"]},"features":"Some([\"with-syn\"])","deps":[["quote v0.3.12",1973424196129769093],["serde_codegen_internals v0.11.3",17357443032588231753],["syn v0.10.8",10993331444804370367]],"rustflags":[]}

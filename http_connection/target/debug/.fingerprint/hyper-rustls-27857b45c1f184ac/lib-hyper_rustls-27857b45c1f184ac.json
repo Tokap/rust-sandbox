@@ -1,0 +1,1 @@
+{"rustc":16335750421109157632,"target":6869280509045430158,"profile":11625325535095225723,"local":{"variant":"Precalculated","fields":["0.3.1"]},"features":"None","deps":[["hyper v0.10.4",4487760850679543971],["rustls v0.5.5",10132931204944555642],["webpki-roots v0.6.1",5845973474704322796]],"rustflags":[]}
