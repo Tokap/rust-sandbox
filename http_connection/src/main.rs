@@ -16,6 +16,7 @@ use serde_json::Value;
 type Outcome = Result<Value, String>;
 
 const root: &'static str = "https://jsonplaceholder.typicode.com";
+const slugger: &'static str = "/posts/1";
 
 
 #[allow(dead_code)]
@@ -23,27 +24,16 @@ fn client() -> Client {
     Client::with_connector(HttpsConnector::new(hyper_rustls::TlsClient::new()))
 }
 
-// #[derive(Debug)]
-// struct MyUrl {
-//
-// }
 
 pub struct Builder {
     base_url: String,
     slug: String,
-    // full_url: String,
     // username: String,
     // password: String,
 }
 
 
 impl Builder {
-    // pub fn new(base_url: String, slug: String) -> Builder {
-    //     Builder {
-    //         base_url: base_url,
-    //         slug: slug,
-    //     }
-    // }
 
     pub fn new(base_url: &str, slug: &str) -> Builder {
         Builder {
@@ -55,7 +45,7 @@ impl Builder {
     pub fn compile(&self) -> hyper::Url {
         let mut url = hyper::Url::parse(self.base_url.as_ref()).unwrap();
 
-        url.set_path(req_type.path(self.slug.as_ref()).as_ref());
+        url.set_path(self.slug.as_ref());
 
         url
     }
@@ -68,11 +58,10 @@ fn merge_url(base: &str, slug: &str) -> String {
 }
 
 
-#[allow(dead_code)]
-fn call(url: Url, body: &str) -> Outcome {
+fn call(url: Url) -> Outcome {
     client()
-        .post(url)
-        .body(body)
+        .get(url)
+        // .body(body)
         .send()
         .map_err(|x| format!("{:?}", x))
         .map(|x| {
@@ -82,15 +71,31 @@ fn call(url: Url, body: &str) -> Outcome {
         .and_then(|r| serde_json::from_reader(r).map_err(|x| format!("{:?}", x)))
 }
 
+// pub fn lets_match(input: Outcome) -> String {
+//     match input {
+//         input =>input.to_string(),
+//         None => "Booo"
+//     }
+// }
+
 fn main() {
 
+    // let mut my_string = String::new();
+    let mut my_string = "words".to_string();
+    // my_string = "words".to_string();
 
-
+    let builder = Builder::new(root, slugger);
+    let compiled = builder.compile();
 
     let my_url = merge_url(root, "/more/words");
 
-    call(my_url, "");
+    let tester = call(compiled);
+
+    // call(my_url);
 
     println!("Hello, world!");
-    // println!("{}", my_url)
+    println!("{}", my_url);
+    println!("{:?}", tester);
+    println!("{:?}", my_string)
+    // println!("{}", compiled)
 }
