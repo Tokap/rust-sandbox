@@ -45,3 +45,13 @@ fn new(task: JSON<Task>) -> String { ... }
 
 // Good Rocket Example of Dealing with JSON & Pathing:
 // https://github.com/SergioBenitez/Rocket/blob/master/examples/json/src/main.rs
+
+// WRITING UNIT TESTS IN RUST:
+// http://stackoverflow.com/questions/25107526/how-should-rust-unit-tests-be-organised
+
+// And_thens && Unwrap Error Handling
+
+// std::fs::File::open("Settings.toml")
+//      .and_then(|file| file.read_to_string(&mut data))
+//      .and_then(|size| serde_toml::from_str(data))
+//      .unwrap_or(Err("Invalid Settings.toml"))

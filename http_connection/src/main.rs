@@ -12,10 +12,13 @@ use hyper::{Client, Url};
 use hyper::net::HttpsConnector;
 use hyper::header::{Headers, Authorization, Basic};
 use serde_json::Value;
+use std::io::Read;
+
 
 type Outcome = Result<Value, String>;
 
 const root: &'static str = "https://jsonplaceholder.typicode.com";
+const full_url: &'static str = "https://jsonplaceholder.typicode.com/posts/1";
 const slugger: &'static str = "/posts/1";
 
 
@@ -58,7 +61,22 @@ fn merge_url(base: &str, slug: &str) -> String {
 }
 
 
-fn call(url: Url) -> Outcome {
+// Call function using expected Url Type
+// fn call(url: Url) -> Outcome {
+//     client()
+//         .get(url)
+//         // .body(body)
+//         .send()
+//         .map_err(|x| format!("{:?}", x))
+//         .map(|x| {
+//             print!("RES: {:?}", &x);
+//             x
+//         })
+//         .and_then(|r| serde_json::from_reader(r).map_err(|x| format!("{:?}", x)))
+// }
+
+// Simply change expected type and this works with strings as well
+fn call(url: &str) -> Outcome {
     client()
         .get(url)
         // .body(body)
@@ -71,31 +89,15 @@ fn call(url: Url) -> Outcome {
         .and_then(|r| serde_json::from_reader(r).map_err(|x| format!("{:?}", x)))
 }
 
-// pub fn lets_match(input: Outcome) -> String {
-//     match input {
-//         input =>input.to_string(),
-//         None => "Booo"
-//     }
-// }
+// Convert Response into Result
 
 fn main() {
+    // let builder = Builder::new(root, slugger);
+    // let compiled = builder.compile();
+    // let newer = call(compiled).tester.unwrap().to_owned();
+    // println!("Hello, world!");
+    // println!("{:?}", newer);
 
-    // let mut my_string = String::new();
-    let mut my_string = "words".to_string();
-    // my_string = "words".to_string();
-
-    let builder = Builder::new(root, slugger);
-    let compiled = builder.compile();
-
-    let my_url = merge_url(root, "/more/words");
-
-    let tester = call(compiled);
-
-    // call(my_url);
-
-    println!("Hello, world!");
-    println!("{}", my_url);
-    println!("{:?}", tester);
-    println!("{:?}", my_string)
-    // println!("{}", compiled)
+    let call_response = call(full_url).unwrap();
+    println!("Response is {:?}", call_response);
 }
