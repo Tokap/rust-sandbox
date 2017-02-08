@@ -22,6 +22,7 @@ type Outcome = Result<Value, String>;
 
 const root: &'static str = "https://jsonplaceholder.typicode.com";
 const full_url: &'static str = "https://jsonplaceholder.typicode.com/posts/1";
+const multi_post_url: &'static str = "https://jsonplaceholder.typicode.com/posts";
 const slugger: &'static str = "/posts/1";
 
 
@@ -57,7 +58,7 @@ impl UrlBuilder {
 
 #[get("/")]
 fn index() -> &'static str {
-    "Hello, world!"
+    "Main Page with Nothing Interesting!"
 }
 
 #[get("/howdy")]
@@ -65,17 +66,17 @@ fn howdy() -> &'static str {
     "Hello, there sir!"
 }
 
-#[get("/hello/<name>/<age>/<cool>")]
-fn cool(name: &str, age: u8, cool: bool) -> String {
-    if cool {
-      format!("You're a cool {} year old, {}!", age, name)
-    } else {
-      format!("{}, we need to talk about your coolness.", name)
-    }
-}
 
 #[get("/reviews")]
 fn reviews() -> String {
+    match call(multi_post_url) {
+        Ok(r) => return r.to_string(),
+        Err(_) => return format!("No Reviews Found")
+    }
+}
+
+#[get("/reviews/single")]
+fn review() -> String {
     match call(full_url) {
         Ok(r) => return r.to_string(),
         Err(_) => return format!("No Reviews Found")
@@ -84,7 +85,7 @@ fn reviews() -> String {
 
 fn start_server() {
     rocket::ignite()
-    .mount("/", routes![index, cool, howdy, reviews])
+    .mount("/", routes![index, howdy, review, reviews])
     .launch();
 }
 
