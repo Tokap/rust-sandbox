@@ -1,103 +1,69 @@
-extern crate rocket;
-extern crate serde;
-extern crate serde_json;
-extern crate hyper;
-extern crate hyper_rustls;
-extern crate uuid;
-extern crate url;
-extern crate config;
+fn cube(c: usize) ->  usize {
+    c * c * c
+}
 
-use std::error::Error;
-use hyper::{Client, Url};
-use hyper::net::HttpsConnector;
-use hyper::header::{Headers, Authorization, Basic};
-use serde_json::Value;
-use std::io::Read;
-
-
-type Outcome = Result<Value, String>;
-
-const root: &'static str = "https://jsonplaceholder.typicode.com";
-const full_url: &'static str = "https://jsonplaceholder.typicode.com/posts/1";
-const slugger: &'static str = "/posts/1";
-
+fn sum_vector(v: Vec<usize>) -> usize {
+  v.iter().sum()
+}
 
 #[allow(dead_code)]
-fn client() -> Client {
-    Client::with_connector(HttpsConnector::new(hyper_rustls::TlsClient::new()))
+fn divisible_by_two(c: usize) -> bool {
+  c % 2 == 0
 }
 
-
-pub struct Builder {
-    base_url: String,
-    slug: String,
-    // username: String,
-    // password: String,
+fn cube_vector(v: Vec<usize>) -> Vec<usize> {
+  v.clone().into_iter().map(|x| cube(x)).collect()
 }
 
-
-impl Builder {
-
-    pub fn new(base_url: &str, slug: &str) -> Builder {
-        Builder {
-            base_url: base_url.to_string(),
-            slug: slug.to_string(),
-        }
-    }
-
-    pub fn compile(&self) -> hyper::Url {
-        let mut url = hyper::Url::parse(self.base_url.as_ref()).unwrap();
-
-        url.set_path(self.slug.as_ref());
-
-        url
-    }
+fn cube_and_sum(c: Vec<usize>) -> usize {
+  let cubed_v: Vec<usize> = cube_vector(c);
+  sum_vector(cubed_v)
 }
 
-
-fn merge_url(base: &str, slug: &str) -> String {
-    let fixed_base = base.to_string();
-    return fixed_base + slug;
+fn sum_and_check(v: Vec<usize>) -> bool {
+  let summed_vector: usize = sum_vector(v);
+  divisible_by_two(summed_vector)
 }
 
+fn general_process(s: &str, c: usize) {
 
-// Call function using expected Url Type
-// fn call(url: Url) -> Outcome {
-//     client()
-//         .get(url)
-//         // .body(body)
-//         .send()
-//         .map_err(|x| format!("{:?}", x))
-//         .map(|x| {
-//             print!("RES: {:?}", &x);
-//             x
-//         })
-//         .and_then(|r| serde_json::from_reader(r).map_err(|x| format!("{:?}", x)))
-// }
-
-// Simply change expected type and this works with strings as well
-fn call(url: &str) -> Outcome {
-    client()
-        .get(url)
-        // .body(body)
-        .send()
-        .map_err(|x| format!("{:?}", x))
-        .map(|x| {
-            print!("RES: {:?}", &x);
-            x
-        })
-        .and_then(|r| serde_json::from_reader(r).map_err(|x| format!("{:?}", x)))
 }
 
-// Convert Response into Result
+fn to_integer(s: &str) -> usize {
+    s.parse::<usize>().unwrap()
+}
+
+fn map_int(v: Vec<&str>) -> Vec<usize> {
+    v.clone().into_iter().map(|x| to_integer(x)).collect()
+}
+
+fn remove_head_and_tail(v: Vec<&str>) -> Vec<&str> {
+    let mut vec = v.clone();
+    vec.remove(0);
+    vec.pop();
+    vec
+}
+
 
 fn main() {
-    // let builder = Builder::new(root, slugger);
-    // let compiled = builder.compile();
-    // let newer = call(compiled).tester.unwrap().to_owned();
-    // println!("Hello, world!");
-    // println!("{:?}", newer);
+    let vec: Vec<usize> = vec![1,2,3];
 
-    let call_response = call(full_url).unwrap();
-    println!("Response is {:?}", call_response);
+    let mut str_vec: Vec<&str> = vec!["", "1","2","3", ""];
+
+    // let changed = map_int(str_vec);
+
+    let cubed: Vec<usize> = cube_vector(vec);
+
+    let v = vec![1,2,3,4,5,6];
+
+    let v = v.into_iter().filter(|&i|i != 0).collect::<Vec<_>>();
+
+    let cropped = remove_head_and_tail(str_vec);
+
+    // let tester = sum_and_check(cubed);
+
+    // println!("Sum is {:?}", changed);
+    println!("Test is {:?}", cropped);
+    // println!("OG is {:?}", str_vec);
+
 }
