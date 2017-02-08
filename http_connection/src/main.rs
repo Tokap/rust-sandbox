@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 fn cube(c: usize) ->  usize {
     c * c * c
 }
@@ -41,7 +42,7 @@ fn remove_head_and_tail(v: Vec<&str>) -> Vec<&str> {
 }
 
 fn split_to_num_vec(s: &str) -> Vec<usize> {
-    let mut vec = s.split("").collect();
+    let vec = s.split("").collect();
     let cropped = remove_head_and_tail(vec);
     map_int(cropped)
 }
@@ -53,12 +54,11 @@ fn shift_vector(v: Vec<usize>) -> Vec<usize> {
     vec
 }
 
+// This FN will likely be used to check data chunks
 fn reverse_or_return(s: &str) -> Vec<usize> {
-    let original = s.clone();
-    let nums = split_to_num_vec(s);
-    let summed = cube_and_sum(nums.clone());
+    let nums = split_to_num_vec(s.clone());
 
-    if divisible_by_two(summed) {
+    if sum_and_check(nums.clone()) {
         nums.into_iter().rev().collect()
     } else {
         shift_vector(nums)
@@ -67,7 +67,6 @@ fn reverse_or_return(s: &str) -> Vec<usize> {
 
 fn main() {
     let trial = "123456";
-    let trial_2 = trial.clone();
     let trial_3 = "66443876";
     let my_outcome = reverse_or_return(trial_3);
     let my_outcome_2 = reverse_or_return(trial);
@@ -76,13 +75,11 @@ fn main() {
 
     let mut str_vec: Vec<&str> = vec!["", "1","2","3", ""];
 
-    let cubed: Vec<usize> = cube_vector(vec);
-
     let v = vec![1,2,3,4,5,6];
     let shift = shift_vector(v);
 
     println!("Outcome is {:?}", my_outcome);
     println!("Outcome Dos is {:?}", my_outcome_2);
-    println!("OG is {:?}", shift);
+    println!("Shift is {:?}", shift);
 
 }
