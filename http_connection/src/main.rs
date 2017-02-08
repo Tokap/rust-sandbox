@@ -25,10 +25,6 @@ fn sum_and_check(v: Vec<usize>) -> bool {
   divisible_by_two(summed_vector)
 }
 
-fn general_process(s: &str, c: usize) {
-
-}
-
 fn to_integer(s: &str) -> usize {
     s.parse::<usize>().unwrap()
 }
@@ -44,26 +40,49 @@ fn remove_head_and_tail(v: Vec<&str>) -> Vec<&str> {
     vec
 }
 
+fn split_to_num_vec(s: &str) -> Vec<usize> {
+    let mut vec = s.split("").collect();
+    let cropped = remove_head_and_tail(vec);
+    map_int(cropped)
+}
+
+fn shift_vector(v: Vec<usize>) -> Vec<usize> {
+    let mut vec = v.clone();
+    let first_el = vec.remove(0);
+    vec.push(first_el);
+    vec
+}
+
+fn reverse_or_return(s: &str) -> Vec<usize> {
+    let original = s.clone();
+    let nums = split_to_num_vec(s);
+    let summed = cube_and_sum(nums.clone());
+
+    if divisible_by_two(summed) {
+        nums.into_iter().rev().collect()
+    } else {
+        shift_vector(nums)
+    }
+}
 
 fn main() {
+    let trial = "123456";
+    let trial_2 = trial.clone();
+    let trial_3 = "66443876";
+    let my_outcome = reverse_or_return(trial_3);
+    let my_outcome_2 = reverse_or_return(trial);
+
     let vec: Vec<usize> = vec![1,2,3];
 
     let mut str_vec: Vec<&str> = vec!["", "1","2","3", ""];
 
-    // let changed = map_int(str_vec);
-
     let cubed: Vec<usize> = cube_vector(vec);
 
     let v = vec![1,2,3,4,5,6];
+    let shift = shift_vector(v);
 
-    let v = v.into_iter().filter(|&i|i != 0).collect::<Vec<_>>();
-
-    let cropped = remove_head_and_tail(str_vec);
-
-    // let tester = sum_and_check(cubed);
-
-    // println!("Sum is {:?}", changed);
-    println!("Test is {:?}", cropped);
-    // println!("OG is {:?}", str_vec);
+    println!("Outcome is {:?}", my_outcome);
+    println!("Outcome Dos is {:?}", my_outcome_2);
+    println!("OG is {:?}", shift);
 
 }
