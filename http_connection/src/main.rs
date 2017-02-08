@@ -1,3 +1,6 @@
+#![feature(plugin)]
+#![plugin(rocket_codegen)]
+
 extern crate rocket;
 extern crate serde;
 extern crate serde_json;
@@ -28,18 +31,16 @@ fn client() -> Client {
 }
 
 
-pub struct Builder {
+pub struct UrlBuilder {
     base_url: String,
     slug: String,
-    // username: String,
-    // password: String,
 }
 
 
-impl Builder {
+impl UrlBuilder {
 
-    pub fn new(base_url: &str, slug: &str) -> Builder {
-        Builder {
+    pub fn new(base_url: &str, slug: &str) -> UrlBuilder {
+        UrlBuilder {
             base_url: base_url.to_string(),
             slug: slug.to_string(),
         }
@@ -54,26 +55,39 @@ impl Builder {
     }
 }
 
-
-fn merge_url(base: &str, slug: &str) -> String {
-    let fixed_base = base.to_string();
-    return fixed_base + slug;
+#[get("/")]
+fn index() -> &'static str {
+    "Hello, world!"
 }
 
+#[get("/howdy")]
+fn howdy() -> &'static str {
+    "Hello, there sir!"
+}
 
-// Call function using expected Url Type
-// fn call(url: Url) -> Outcome {
-//     client()
-//         .get(url)
-//         // .body(body)
-//         .send()
-//         .map_err(|x| format!("{:?}", x))
-//         .map(|x| {
-//             print!("RES: {:?}", &x);
-//             x
-//         })
-//         .and_then(|r| serde_json::from_reader(r).map_err(|x| format!("{:?}", x)))
-// }
+#[get("/hello/<name>/<age>/<cool>")]
+fn cool(name: &str, age: u8, cool: bool) -> String {
+    if cool {
+      format!("You're a cool {} year old, {}!", age, name)
+    } else {
+      format!("{}, we need to talk about your coolness.", name)
+    }
+}
+
+#[get("/reviews")]
+fn reviews() -> String {
+    match call(full_url) {
+        Ok(r) => return r.to_string(),
+        Err(_) => return format!("No Reviews Found")
+    }
+}
+
+fn start_server() {
+    rocket::ignite()
+    .mount("/", routes![index, cool, howdy, reviews])
+    .launch();
+}
+
 
 // Simply change expected type and this works with strings as well
 fn call(url: &str) -> Outcome {
@@ -89,32 +103,7 @@ fn call(url: &str) -> Outcome {
         .and_then(|r| serde_json::from_reader(r).map_err(|x| format!("{:?}", x)))
 }
 
-// Convert Response into Result
-
-
-fn square(c: usize) ->  usize {
-    c * c * c
-}
-
-#[allow(dead_code)]
-fn sum_vector(c: Vec<usize>) -> usize {
-  c.iter().sum()
-}
-
-fn divisble_by_two(c: usize) -> bool {
-  c % 2 == 0
-}
 
 fn main() {
-    // let builder = Builder::new(root, slugger);
-    // let compiled = builder.compile();
-    // let newer = call(compiled).tester.unwrap().to_owned();
-    // println!("Hello, world!");
-    // println!("{:?}", newer);
-
-    // let call_response = call(full_url).unwrap();
-    // println!("Response is {:?}", call_response);
-
-    let sum: usize = vec![1,2,3,4,5,6].iter().sum();
-    println!("Sum is {:?}", sum);
+    start_server();
 }

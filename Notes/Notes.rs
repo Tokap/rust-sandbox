@@ -55,3 +55,25 @@ fn new(task: JSON<Task>) -> String { ... }
 //      .and_then(|file| file.read_to_string(&mut data))
 //      .and_then(|size| serde_toml::from_str(data))
 //      .unwrap_or(Err("Invalid Settings.toml"))
+
+/*****************************************/
+/******* Nate's Call Function ***********/
+/***************************************/
+
+// Call function using expected Url Type
+// fn call(url: Url) -> Outcome {
+//     client()
+//         .get(url)
+//         // .body(body)
+//         .send()
+//         .map_err(|x| format!("{:?}", x))
+//         .map(|x| {
+//             print!("RES: {:?}", &x);
+//             x
+//         })
+//         .and_then(|r| serde_json::from_reader(r).map_err(|x| format!("{:?}", x)))
+// }
+
+// let builder = UrlBuilder::new(root, slugger);
+// let compiled = builder.compile();
+// let newer = call(compiled).tester.unwrap().to_owned();
