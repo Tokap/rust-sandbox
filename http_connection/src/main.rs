@@ -19,6 +19,14 @@ use serde_json::Value;
 
 type Outcome = Result<Value, String>;
 
+#[derive(Debug)]
+pub struct ReturnContent {
+    body: String,
+    id: usize,
+    title: String,
+    userId: usize
+}
+
 const ROOT: &'static str            = "https://jsonplaceholder.typicode.com";
 const FULL_URL: &'static str        = "https://jsonplaceholder.typicode.com/posts/1";
 const MULTI_POST_URL: &'static str  = "https://jsonplaceholder.typicode.com/posts";
@@ -71,16 +79,30 @@ fn review() -> String {
 
 #[get("/reviews/<num>")]
 fn review_count(num: usize) -> String {
+    let q;
     match call(MULTI_POST_URL) {
-        Ok(r) =>
-            return r.as_array().unwrap().get(num).unwrap().to_string(),
+        Ok(r) => q = r,
         Err(_) => return format!("No Reviews Found")
+    }
+    return_truncated_json(q, num)
+}
+
+fn return_truncated_json(v: Value, i: usize) -> String {
+    let vec;
+    match v.as_array() {
+        Some(r) => vec = r,
+        None => return format!("Cannot Convert to vector!")
+    }
+
+    let my_slice = &vec[0..i];
+
+    match serde_json::to_string(&my_slice) {
+        Ok(r) => r,
+        Err(_) => format!("Nothing to Return")
     }
 }
 
-// fn test_function(v: Value) {
-//
-// }
+
 
 fn start_server() {
     rocket::ignite()
@@ -89,8 +111,5 @@ fn start_server() {
 }
 
 fn main() {
-    // let xs: [i32; 5] = [1, 2, 3, 4, 5];
-    // println!("Array Slice: {:?}", &xs[1..3+1]);
-
     start_server();
 }
