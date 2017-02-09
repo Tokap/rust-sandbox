@@ -16,6 +16,7 @@ uuid = { version = "0.3.1", features = ["v4"] }
 config = "0.2.0"
 error-chain = "0.8.*"
 derive-error-chain = "0.8.*"
+mysql = "*"
 
 [dependencies.url]
 git = "https://github.com/servo/rust-url"
