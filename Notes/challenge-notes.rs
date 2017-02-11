@@ -158,3 +158,106 @@ fn comp(a: Vec<i64>, b: Vec<i64>) -> bool {
     a2.sort();
     a1 == a2
 }
+
+/****************************************************/
+/** Calc Time to New Car Purchase Based on Params **/
+/**************************************************/
+fn nb_months(old: i32, new: i32, saving: i32, perc: f64) -> (i32, i32) {
+    let mut old_car: f64    = old.clone() as f64;
+    let mut new_car: f64    = new.clone() as f64;
+    let mut savings: f64    = 0.0;
+    let mut perc_drop: f64  = perc.clone() * 0.01;
+    let mut months: i32     = 0;
+
+    while new_car > (savings + old_car) {
+        months += 1;
+        if (months % 2 == 0) && (months != 0) { perc_drop = perc_drop + (0.5 * 0.01) }
+        savings = savings + saving.clone() as f64;
+        old_car = old_car * ( (0.0 - perc_drop.clone()) + 1.0);
+        new_car = new_car * ( (0.0 - perc_drop.clone()) + 1.0);
+    }
+    let final_savings = ((savings + old_car ) - new_car).round() as i32;
+    let final_months = months.clone();
+
+    (final_months, final_savings)
+}
+
+/****************************************************/
+/** Reverse, Rotate & manipulate strings          **/
+/**************************************************/
+fn rot(s: &str) -> String {
+    let v: Vec<&str> = s.rsplit("\n").collect();
+    let mut revd : Vec<String> = Vec::new();
+    v.join("\n").to_string();
+
+    for stringdude in v.into_iter() {
+      let reversed = stringdude.to_string().rsplit("").collect();
+      revd.push(reversed);
+    }
+    revd.join("\n").to_string()
+}
+
+fn selfie(s: &str) -> String {
+    let v: Vec<&str> = s.split("\n").collect();
+    let mut return_vec : Vec<String> = Vec::new();
+    v.join("\n").to_string();
+
+    for stringdude in v.into_iter() {
+      let mut stringman = stringdude.to_string();
+      let stringposter = stringman.clone();
+      let dots: &str = if stringposter.len() > 2 {"...."} else {".."};
+      stringman.push_str(dots);
+
+      return_vec.push(stringman);
+    }
+    return_vec.join("\n").to_string()
+}
+
+fn selfie_and_rot(s: &str) -> String {
+    let st = s.clone();
+    let v: Vec<&str> = s.rsplit("\n").collect();
+    let mut revd : Vec<String> = Vec::new();
+    v.join("\n").to_string();
+
+    for stringdude in v.into_iter() {
+      let reversed: String = stringdude.to_string().rsplit("").collect();
+      let rev_copy = reversed.clone();
+      let mut dots_added: String = if rev_copy.len() > 2 {"....".to_string()} else { "..".to_string()};
+      dots_added.push_str(&reversed);
+      revd.push(dots_added);
+    }
+    let rot_complete: String = revd.join("\n").to_string();
+    let mut selfie: String = selfie(st);
+    selfie.push_str("\n");
+    selfie.push_str(&rot_complete);
+    selfie
+}
+
+// I tested edge case with below. Normally a 4x4 (4 words, 4 breaks) setup
+let s: &str = "pR\nKo";
+let result: String = selfie_and_rot(s);
+println!("Result: {}",result );
+
+// Simple Solution:
+fn rot(s: &str) -> String {
+    s.chars().rev().collect::<String>() // Big takeaway - you can specify return type with collect
+}
+fn rep(s: &str, n: usize) -> String {
+    std::iter::repeat(s).take(n).collect::<String>()
+}
+fn selfie_and_rot(s: &str) -> String {
+    let newstr1 = s.split('\n')
+      .collect::<Vec<&str>>()
+      .iter().map(|u| [u.to_string(), rep(".", u.len())].join("") ).collect::<Vec<String>>()
+      .join("\n");
+    let newstr2 = rot(s).split('\n')
+      .collect::<Vec<&str>>()
+      .iter().map(|u| [rep(".", u.len()), u.to_string()].join("") ).collect::<Vec<String>>()
+      .join("\n");
+    [newstr1, "\n".to_string(), newstr2].join("")
+
+}
+
+fn oper(f: fn(&str) -> String, s: &str) -> String {
+    f(s)
+}
