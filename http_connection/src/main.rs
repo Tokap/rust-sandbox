@@ -116,12 +116,33 @@ pub fn get_account_data_by_param(param: &str, identifier: &str) -> Vec<AccountDa
     account_data_vec
 }
 
+pub fn write_account_data() -> () {
+
+    let z = build_pool(); // Our pool. For this ex, build from static info shown above
+    let mut conn = z.get_conn().unwrap(); // Get a connection to the pool
+
+    let mut all_returns: Vec<Vec<String>> = Vec::new();
+    let mut account_data_vec: Vec<AccountDataArchive> = Vec::new();
+    let params = format!("INSERT INTO `account_data_archive` (network, network_id, network_username,
+         follower_count, correlation_id, archive_id, type_id)
+         VALUES ('twitter', '1234567',
+         'black_mamba', '15555', '1X567V34M', '1','2')");
+
+    conn.query(params).map(|query_result| {
+         for row in query_result {
+            let unwrapped =  row.unwrap().unwrap();
+            let mut row_returns: Vec<String> = Vec::new();
+        }
+    });
+}
+
 pub fn get_account_data_by_id(identifier: &str) -> Vec<AccountDataArchive> {
     get_account_data_by_param("id", identifier)
 }
 
 fn main() {
     // get_account_data_by_param("id", "1");
-    get_account_data_by_id("1");
+    // get_account_data_by_id("1");
+    post_account_data_by_param();
     // server::start_server();
 }
