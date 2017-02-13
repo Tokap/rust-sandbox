@@ -232,6 +232,5 @@ fn main() {
         }
     });
 
-    // println!("RESULT: {:?}", all_returns);
     // server::start_server();
 }

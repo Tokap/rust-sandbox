@@ -1,35 +1,9 @@
-#![feature(plugin)]
-#![plugin(rocket_codegen)]
-
-#[macro_use]
-extern crate serde_json;
-
-
-extern crate rocket;
-extern crate serde;
-extern crate hyper;
-extern crate hyper_rustls;
-extern crate uuid;
-extern crate url;
-extern crate config;
-
-extern crate mysql;
-extern crate rustc_serialize;
-
 use rustc_serialize::json;
 use mysql::{OptsBuilder, Pool, PooledConn, Error, Value};
 
 mod server;
 mod connections;
 mod helpers;
-
-#[derive(Debug, PartialEq, Eq)]
-pub struct ReturnContent {
-    id: u64,
-    userId: u64,
-    title: String,
-    body: String,
-}
 
 #[derive(Debug, PartialEq, Eq, RustcDecodable, RustcEncodable)]
 pub struct AccountDataArchive {
@@ -47,12 +21,6 @@ pub struct AccountDataArchive {
     deleted_timestamp: String,
 }
 
-pub struct AccountDataVector {
-    account_data: Vec<AccountDataArchive>
-}
-
-// const POOL = mysql::Pool::new("").unwrap();
-
 fn build_pool() -> Pool {
     let mut builder = OptsBuilder::new();
     builder
@@ -64,24 +32,16 @@ fn build_pool() -> Pool {
     pool.unwrap() // should have proper error handling
 }
 
-fn test_and_output_connection(p: Pool) -> () {
-    match p.try_get_conn(50000) {
-        Ok(rez) => println!("Okay! {:?}", rez),
-        Err(e) => println!("Bad news: {:?}", e),
-    }
-}
 
-
-pub fn get_account_data_by_param(param: &str, identifier: &str) -> Vec<AccountDataArchive> {
+fn get_all_factory() -> Vec<AccountDataArchive> {
 
     let z = build_pool(); // Our pool. For this ex, build from static info shown above
     let mut conn = z.get_conn().unwrap(); // Get a connection to the pool
 
     let mut all_returns: Vec<Vec<String>> = Vec::new();
     let mut account_data_vec: Vec<AccountDataArchive> = Vec::new();
-    let params = format!("SELECT * FROM `account_data_archive` WHERE `{}`={}", param, identifier);
 
-    conn.query(params).map(|query_result| {
+    conn.query("SELECT * FROM `account_data_archive` WHERE `id`=1").map(|query_result| {
 
          for row in query_result {
             let unwrapped =  row.unwrap().unwrap();
@@ -111,17 +71,8 @@ pub fn get_account_data_by_param(param: &str, identifier: &str) -> Vec<AccountDa
             };
             account_data_vec.push(account_info);
         }
+
         println!("Final Return: {:?}", account_data_vec);
     });
     account_data_vec
-}
-
-pub fn get_account_data_by_id(identifier: &str) -> Vec<AccountDataArchive> {
-    get_account_data_by_param("id", identifier)
-}
-
-fn main() {
-    // get_account_data_by_param("id", "1");
-    get_account_data_by_id("1");
-    // server::start_server();
 }
