@@ -5,3 +5,7 @@ authors = ["Patrick Allen <allenpatrick86@gmail.com>"]
 
 [dependencies]
 rand="0.3.0"
+serde = "0.8.*"
+serde_json = "0.8.*"
+serde_derive = "0.8.*"
+rustc-serialize = "^0.3"

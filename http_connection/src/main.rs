@@ -64,8 +64,6 @@ fn build_pool() -> Pool {
     pool.unwrap() // should have proper error handling
 }
 
-// Result<PooledConn, Error>
-
 fn test_and_output_connection(p: Pool) -> () {
     match p.try_get_conn(50000) {
         Ok(rez) => println!("Okay! {:?}", rez),
@@ -74,48 +72,27 @@ fn test_and_output_connection(p: Pool) -> () {
 }
 
 
-fn main() {
-    /***********************************************************************************/
-    /***************** A Very Basic MySQL Query & Explanations  ***********************/
-    /*********************************************************************************/
+fn get_all_factory() -> Vec<AccountDataArchive> {
 
-    // The building blocks we need:
     let z = build_pool(); // Our pool. For this ex, build from static info shown above
     let mut conn = z.get_conn().unwrap(); // Get a connection to the pool
 
-
-    let mut container: Vec<String> = Vec::new(); //Container for string building later
     let mut all_returns: Vec<Vec<String>> = Vec::new();
-    let mut return_vec: Vec<AccountDataArchive> = Vec::new();
+    let mut account_data_vec: Vec<AccountDataArchive> = Vec::new();
 
-    // Making the query in painful detail:
-    // NOTE: all stages of the query use custom Structs for the rust-mysql library
-    // For more info on manipulation options at each stage, see the rust-mysql docs
-
-    conn.query("SELECT * FROM `account_data_archive`").map(|mut query_result| {
-        // query_result is a mysql::QueryResult that contains a Row for each piece of matching data
-        // QueryResults has a number of  associated methods as a result of being an iterator
-        // column_indexes() will return return a hashmap of the column names & their index
+    conn.query("SELECT * FROM `account_data_archive`").map(|query_result| {
 
          for row in query_result {
-            // ROW before anything is a Result<mysql::Row, mysql::Error>
-            // unwrap once for Row & again to unwrap the Values of the Row -> Vec<Value>
-
             let unwrapped =  row.unwrap().unwrap();
-            let mut row_returns: Vec<String> = Vec::new(); // My return box
+            let mut row_returns: Vec<String> = Vec::new();
 
             for value in unwrapped {
-                    row_returns.push(value.into_str())
+                row_returns.push(value.into_str())
             }
 
             all_returns.push(row_returns);
-
         }
-/********************************************************************************************/
-/****************** Creating Vec<AccountDataArchive> from return vector ********************/
-/******************************************************************************************/
-
-        let mut account_data_vec: Vec<AccountDataArchive> = Vec::new();
+        
         for row_data in all_returns {
             let account_info = AccountDataArchive {
                 id: row_data[0].to_string().to_owned(),
@@ -136,6 +113,9 @@ fn main() {
 
         println!("Final Return: {:?}", account_data_vec);
     });
-    // println!("Final Return: {:?}", account_data_vec);
+    account_data_vec
+}
 
+fn main() {
+    get_all_factory();
 }
