@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Patrick Allen <allenpatrick86@gmail.com>"]
 
 [dependencies]
+kafka = "0.5"
 rocket = "0.1.6"
 rocket_codegen = "0.1.6"
 rocket_contrib = "0.1.6"
@@ -17,6 +18,9 @@ config = "0.2.0"
 error-chain = "0.8.*"
 derive-error-chain = "0.8.*"
 mysql = "*"
+getopts = "*"
+env_logger = "*"
+rustc-serialize = "^0.3"
 
 [dependencies.url]
 git = "https://github.com/servo/rust-url"

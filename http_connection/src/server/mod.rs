@@ -9,18 +9,18 @@ const MULTI_POST_URL: &'static str  = "https://jsonplaceholder.typicode.com/post
 // const SLUGGER: &'static str         = "/posts/1";
 
 #[get("/")]
-fn index() -> &'static str {
+pub fn index() -> &'static str {
     "Main Page with Nothing Interesting!"
 }
 
 #[get("/howdy")]
-fn howdy() -> &'static str {
+pub fn howdy() -> &'static str {
     "Hello, there sir!"
 }
 
 
 #[get("/reviews")]
-fn reviews() -> String {
+pub fn reviews() -> String {
     match call(MULTI_POST_URL) {
         Ok(r) => return r.to_string(),
         Err(e) => return format!("No Reviews Found {:?}", e)
@@ -28,7 +28,7 @@ fn reviews() -> String {
 }
 
 #[get("/reviews/single")]
-fn review() -> String {
+pub fn review() -> String {
     match call(FULL_URL) {
         Ok(r) => return r.to_string(),
         Err(_) => return format!("No Reviews Found")
@@ -36,7 +36,7 @@ fn review() -> String {
 }
 
 #[get("/reviews/<num>")]
-fn review_count(num: usize) -> String {
+pub fn review_count(num: usize) -> String {
     let q;
     match call(MULTI_POST_URL) {
         Ok(r) => q = r,

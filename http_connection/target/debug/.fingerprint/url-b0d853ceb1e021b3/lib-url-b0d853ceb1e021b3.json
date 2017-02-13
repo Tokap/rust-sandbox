@@ -1,1 +1,0 @@
-{"rustc":16335750421109157632,"target":8362507153049844160,"profile":11625325535095225723,"local":{"variant":"Precalculated","fields":["24f6e6b6a9ca9ec8d7464e3c34cf088656cd6132"]},"features":"None","deps":[["idna v0.1.0 (https://github.com/servo/rust-url#24f6e6b6)",14501397255791763132],["matches v0.1.4",18089004577781869118]],"rustflags":[]}
