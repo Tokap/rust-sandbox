@@ -91,6 +91,7 @@ fn main() {
     let pool: Pool = yoursql::build_pool("127.0.0.1", "ip_brolytics", "root", 3306);
 
     let table: String = String::from("account_data_archive");
+    
     let mut tuple_vec: Vec<(String, String)> = Vec::new();
         tuple_vec.push(("network".to_string(), "twitter".to_string()));
         tuple_vec.push(("network_id".to_string(), "8964323".to_string()));
@@ -101,9 +102,12 @@ fn main() {
         tuple_vec.push(("type_id".to_string(), "2".to_string()));
 
     yoursql::basic_write_to_table(table, tuple_vec, pool);
+    // yoursql::get_account_json_by_id("1", "account_data_archive", pool);
 
     let bill: SomePerson = SomePerson {
         name: "Patrick".to_string(),
         age: 31
     };
+
+    // println!("Bill's Actual Name: {:?}", bill.name);
 }

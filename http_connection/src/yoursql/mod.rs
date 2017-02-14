@@ -34,8 +34,8 @@ pub fn build_pool(
 pub fn test_and_output_connection(p: Pool) -> bool {
 
     match p.try_get_conn(50000) {
-        Ok(rez) => true,
-        Err(e) => false,
+        Ok(_) => true,
+        Err(_) => false,
     }
 }
 
@@ -70,6 +70,7 @@ pub fn get_table_json_by_param(
 
         let mut all_row_values: Vec<Vec<String>> = Vec::new();
         let mut json_vec: Vec<String> = Vec::new();
+
         let params = format!("SELECT * FROM `{}` WHERE `{}`={}", table, param, identifier);
 
         conn.query(params).map(|query_result| {
@@ -87,7 +88,7 @@ pub fn get_table_json_by_param(
                 all_row_values.push(row_returns);
             }
 
-            for row_contents in all_row_values.clone() {
+            for row_contents in all_row_values {
                 let mut json_return: String = String::new(); // Where we build our JSON
                 let col_names: Vec<String> = col_name_vec.clone();
                 for i in 0..row_contents.len() {
@@ -108,8 +109,7 @@ pub fn get_table_json_by_param(
                 json_vec.push(json_return.clone()); //Add to our collection vector
             }
         });
-        println!("JSON VEC: {:?}", json_vec.clone());
-        json_vec
+         json_vec
     // altenatively, we can make the json string outside of the loop scope and return just that
     // Please note that such a method would not support conditions with multiple returns
 }
@@ -164,13 +164,14 @@ pub fn write_to_table(
         let mut conn = pool.get_conn().unwrap();
 
         conn.query(sql).map(|query_result| {
-                 println!("Query Results: {:?}",query_result);
+                 println!("Query Results: {:?}", query_result.last_insert_id());
         }); // Currently, no error handling or confirmation of return
+        // should make custom struct with all return details as norm
 }
 
-/*******************************************************/
-/***************** Combined Functions *****************/
-/*****************************************************/
+  //*****************************************************/
+ //**************** Combined Functions *****************/
+//*****************************************************/
 
 pub fn basic_write_to_table(
     table: String,

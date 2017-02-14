@@ -1,0 +1,1 @@
+/Users/patrickallen/Documents/learning/test-rust/rust-sandbox/yoursql/target/debug/yoursql: /Users/patrickallen/Documents/learning/test-rust/rust-sandbox/yoursql/src/patsql/mod.rs /Users/patrickallen/Documents/learning/test-rust/rust-sandbox/yoursql/src/main.rs

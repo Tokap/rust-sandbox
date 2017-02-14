@@ -25,6 +25,8 @@ mysql = "*"
 getopts = "*"
 env_logger = "*"
 
+json = "*"
+
 
 [dependencies.url]
 git = "https://github.com/servo/rust-url"
