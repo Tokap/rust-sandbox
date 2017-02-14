@@ -3,6 +3,7 @@
 http_connection/target/
 rocket_trial/target/
 fundamentals/target/
+yoursql/target/
 
 # Remove Cargo.lock from gitignore if creating an executable, leave it for libraries
 # More information here http://doc.crates.io/guide.html#cargotoml-vs-cargolock
