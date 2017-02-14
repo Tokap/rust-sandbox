@@ -4,9 +4,8 @@ SHELL: /bin/bash
 TMPDIR: /var/folders/_l/0djwv5rd21jgfpr3_jq7v7nw0000gp/T/
 Apple_PubSub_Socket_Render: /private/tmp/com.apple.launchd.ex3pIJb5SY/Render
 TERM_PROGRAM_VERSION: 3.0.13
-OPENSSL_INCLUDE_DIR: /usr/local/opt/openssl/include
 OLDPWD: /Users/patrickallen
-TERM_SESSION_ID: w0t9p0:8EC64C82-03A3-4FF0-8BFF-5C8970D52F79
+TERM_SESSION_ID: w0t11p0:6C5376B0-34C2-4847-984C-2A24DF41128B
 USER: patrickallen
 COMMAND_MODE: unix2003
 SSH_AUTH_SOCK: /private/tmp/com.apple.launchd.Pi2i8H2k1v/Listeners
@@ -20,7 +19,7 @@ XPC_SERVICE_NAME: 0
 SHLVL: 1
 HOME: /Users/patrickallen
 COLORFGBG: 7;0
-ITERM_SESSION_ID: w0t9p0:8EC64C82-03A3-4FF0-8BFF-5C8970D52F79
+ITERM_SESSION_ID: w0t11p0:6C5376B0-34C2-4847-984C-2A24DF41128B
 LOGNAME: patrickallen
 SECURITYSESSIONID: 186a6
 _: /Users/patrickallen/.cargo/bin/cargo
@@ -29,42 +28,42 @@ CARGO_HOME: /Users/patrickallen/.cargo
 RUST_RECURSION_COUNT: 1
 RUSTUP_TOOLCHAIN: nightly-x86_64-apple-darwin
 RUSTUP_HOME: /Users/patrickallen/.rustup
-OUT_DIR: /Users/patrickallen/Documents/learning/test-rust/rust-sandbox/http_connection/target/debug/build/ring-c9fd192416c642f1/out
-HOST: x86_64-apple-darwin
-CARGO_FEATURE_USE_HEAP: 1
-CARGO_CFG_TARGET_ENDIAN: little
-PROFILE: debug
-RUSTDOC: rustdoc
-CARGO_CFG_TARGET_FAMILY: unix
-OPT_LEVEL: 0
-CARGO_MANIFEST_DIR: /Users/patrickallen/.cargo/registry/src/github.com-1ecc6299db9ec823/ring-0.6.3
-CARGO_CFG_DEBUG_ASSERTIONS: 
-CARGO_CFG_TARGET_POINTER_WIDTH: 64
-CARGO_PKG_DESCRIPTION: Safe, fast, small crypto using Rust.
-RUSTC: rustc
-CARGO_CFG_PROC_MACRO: 
-CARGO_PKG_VERSION_MINOR: 6
-CARGO_PKG_VERSION_PATCH: 3
-TARGET: x86_64-apple-darwin
-CARGO_FEATURE_RSA_SIGNING: 1
-CARGO_FEATURE_DEFAULT: 1
-DEBUG: true
-CARGO_CFG_TARGET_VENDOR: apple
-CARGO_FEATURE_DEV_URANDOM_FALLBACK: 1
-CARGO_CFG_TARGET_THREAD_LOCAL: 
-CARGO_PKG_NAME: ring
-CARGO_PKG_HOMEPAGE: 
-CARGO_PKG_AUTHORS: Brian Smith <brian@briansmith.org>
-CARGO_CFG_TARGET_HAS_ATOMIC: 128,16,32,64,8,ptr
-NUM_JOBS: 8
-CARGO_CFG_TARGET_ENV: 
-CARGO_PKG_VERSION_PRE: 
-CARGO_PKG_VERSION_MAJOR: 0
-CARGO_PKG_VERSION: 0.6.3
-CARGO_CFG_TARGET_FEATURE: sse,sse2,sse3,ssse3
 CARGO_CFG_TARGET_OS: macos
-CARGO_CFG_UNIX: 
+CARGO_CFG_TARGET_FEATURE: sse,sse2,sse3,ssse3
+CARGO_FEATURE_DEV_URANDOM_FALLBACK: 1
+CARGO_PKG_VERSION_PATCH: 3
+DEBUG: true
+CARGO_PKG_AUTHORS: Brian Smith <brian@briansmith.org>
+CARGO_CFG_TARGET_THREAD_LOCAL: 
+OPT_LEVEL: 0
+CARGO_CFG_PROC_MACRO: 
+CARGO_CFG_DEBUG_ASSERTIONS: 
+CARGO_FEATURE_USE_HEAP: 1
+CARGO_MANIFEST_DIR: /Users/patrickallen/.cargo/registry/src/github.com-1ecc6299db9ec823/ring-0.6.3
+CARGO_CFG_TARGET_VENDOR: apple
+CARGO_PKG_DESCRIPTION: Safe, fast, small crypto using Rust.
+HOST: x86_64-apple-darwin
+PROFILE: debug
+CARGO_PKG_VERSION_MINOR: 6
+RUSTDOC: rustdoc
+CARGO_CFG_TARGET_HAS_ATOMIC: 128,16,32,64,8,ptr
+OUT_DIR: /Users/patrickallen/Documents/learning/test-rust/rust-sandbox/http_connection/target/debug/build/ring-c9fd192416c642f1/out
 CARGO_CFG_TARGET_ARCH: x86_64
+CARGO_PKG_VERSION_PRE: 
+CARGO_PKG_NAME: ring
+CARGO_CFG_TARGET_POINTER_WIDTH: 64
+CARGO_FEATURE_RSA_SIGNING: 1
+CARGO_PKG_VERSION: 0.6.3
+CARGO_PKG_HOMEPAGE: 
+CARGO_CFG_TARGET_ENV: 
+CARGO_CFG_TARGET_ENDIAN: little
+TARGET: x86_64-apple-darwin
+CARGO_PKG_VERSION_MAJOR: 0
+NUM_JOBS: 8
+CARGO_FEATURE_DEFAULT: 1
+RUSTC: rustc
+CARGO_CFG_TARGET_FAMILY: unix
+CARGO_CFG_UNIX: 
 mkdir -p /Users/patrickallen/Documents/learning/test-rust/rust-sandbox/http_connection/target/debug/build/ring-c9fd192416c642f1/out/lib
 mkdir -p /Users/patrickallen/Documents/learning/test-rust/rust-sandbox/http_connection/target/debug/build/ring-c9fd192416c642f1/out/obj/crypto
 mkdir -p /Users/patrickallen/Documents/learning/test-rust/rust-sandbox/http_connection/target/debug/build/ring-c9fd192416c642f1/out/obj/crypto/aes

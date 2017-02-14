@@ -4,23 +4,27 @@ version = "0.1.0"
 authors = ["Patrick Allen <allenpatrick86@gmail.com>"]
 
 [dependencies]
-kafka = "0.5"
-rocket = "0.1.6"
-rocket_codegen = "0.1.6"
-rocket_contrib = "0.1.6"
-serde = "0.8.*"
-serde_json = "0.8.*"
-serde_derive = "0.8.*"
-hyper = "0.10.2"
-hyper-rustls = "0.3.0"
+rocket = "*"
+rocket_codegen = "*"
+rocket_contrib = "*"
+
+serde = "*"
+serde_json = "*"
+serde_derive = "*"
+rustc-serialize = "*"
+
+hyper = "*"
+hyper-rustls = "*"
 uuid = { version = "0.3.1", features = ["v4"] }
-config = "0.2.0"
-error-chain = "0.8.*"
-derive-error-chain = "0.8.*"
+config = "*"
+error-chain = "*"
+derive-error-chain = "*"
+
 mysql = "*"
+
 getopts = "*"
 env_logger = "*"
-rustc-serialize = "^0.3"
+
 
 [dependencies.url]
 git = "https://github.com/servo/rust-url"

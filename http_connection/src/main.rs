@@ -1,37 +1,47 @@
+#![feature(use_extern_macros)]
+
 #![feature(plugin)]
 #![plugin(rocket_codegen)]
 
 #[macro_use]
 extern crate serde_json;
 
+#[macro_use]
+extern crate serde_derive;
+
+extern crate serde;
+
+extern crate mysql;
 
 extern crate rocket;
-extern crate serde;
 extern crate hyper;
 extern crate hyper_rustls;
 extern crate uuid;
 extern crate url;
 extern crate config;
 
-extern crate mysql;
-extern crate rustc_serialize;
+use mysql::{OptsBuilder, Pool, PooledConn, Error, Value, QueryResult};
+use serde_json::*;
+use serde::{Serialize, Deserialize};
 
-use rustc_serialize::json;
-use mysql::{OptsBuilder, Pool, PooledConn, Error, Value};
+use mysql::value::from_row;
 
 mod server;
 mod connections;
 mod helpers;
+mod yoursql;
 
-#[derive(Debug, PartialEq, Eq)]
-pub struct ReturnContent {
-    id: u64,
-    userId: u64,
-    title: String,
-    body: String,
+/*******************************************************/
+/********************* My Structs *********************/
+/*****************************************************/
+
+#[derive(Debug, Default, Serialize, Deserialize, PartialEq, Eq)]
+pub struct SomePerson {
+    name: String,
+    age: u32,
 }
 
-#[derive(Debug, PartialEq, Eq, RustcDecodable, RustcEncodable)]
+#[derive(Debug, Default, Serialize, Deserialize, PartialEq, Eq, Clone)]
 pub struct AccountDataArchive {
     id: String,
     network: String,
@@ -47,102 +57,53 @@ pub struct AccountDataArchive {
     deleted_timestamp: String,
 }
 
-pub struct AccountDataVector {
-    account_data: Vec<AccountDataArchive>
+#[derive(Debug, Default, Serialize, Deserialize, PartialEq, Eq, Clone)]
+pub struct AccountDataWrite {
+    network: String,
+    network_id: String,
+    network_username: String,
+    follower_count: String,
+    correlation_id: String,
+    archive_id: String,
+    type_id: String,
 }
 
-// const POOL = mysql::Pool::new("").unwrap();
+// Clyde code: Awesome && thank you!!
+impl AccountDataWrite {
+    fn get_field_names(&self) -> Vec<String> {
 
-fn build_pool() -> Pool {
-    let mut builder = OptsBuilder::new();
-    builder
-        .ip_or_hostname(Some("127.0.0.1"))
-        .tcp_port(3306)
-        .db_name(Some("ip_brolytics"))
-        .user(Some("root"));
-    let pool = Pool::new(builder);
-    pool.unwrap() // should have proper error handling
-}
-
-fn test_and_output_connection(p: Pool) -> () {
-    match p.try_get_conn(50000) {
-        Ok(rez) => println!("Okay! {:?}", rez),
-        Err(e) => println!("Bad news: {:?}", e),
+        let mut field_names: Vec<String> = Vec::new();
+        let temp = json!(AccountDataWrite::default());
+        let er =
+            if let serde_json::Value::Object(o) = temp { o }
+            else {unreachable!()};
+        for (key, _) in er {
+            field_names.push(key);
+        }
+        field_names
     }
 }
 
-
-pub fn get_account_data_by_param(param: &str, identifier: &str) -> Vec<AccountDataArchive> {
-
-    let z = build_pool(); // Our pool. For this ex, build from static info shown above
-    let mut conn = z.get_conn().unwrap(); // Get a connection to the pool
-
-    let mut all_returns: Vec<Vec<String>> = Vec::new();
-    let mut account_data_vec: Vec<AccountDataArchive> = Vec::new();
-    let params = format!("SELECT * FROM `account_data_archive` WHERE `{}`={}", param, identifier);
-
-    conn.query(params).map(|query_result| {
-
-         for row in query_result {
-            let unwrapped =  row.unwrap().unwrap();
-            let mut row_returns: Vec<String> = Vec::new();
-
-            for value in unwrapped {
-                row_returns.push(value.into_str())
-            }
-
-            all_returns.push(row_returns);
-        }
-
-        for row_data in all_returns {
-            let account_info = AccountDataArchive {
-                id: row_data[0].to_string().to_owned(),
-                network: row_data[1].to_string().to_owned(),
-                network_id: row_data[2].to_string().to_owned(),
-                network_username: row_data[3].to_string().to_owned(),
-                follower_count: row_data[4].to_string().to_owned(),
-                correlation_id: row_data[5].to_string().to_owned(),
-                archive_id: row_data[6].to_string().to_owned(),
-                type_id: row_data[7].to_string().to_owned(),
-                created_at: row_data[8].to_string().to_owned(),
-                updated_at: row_data[9].to_string().to_owned(),
-                deleted: row_data[10].to_string().to_owned(),
-                deleted_timestamp: row_data[11].to_string().to_owned(),
-            };
-            account_data_vec.push(account_info);
-        }
-        println!("Final Return: {:?}", account_data_vec);
-    });
-    account_data_vec
-}
-
-pub fn write_account_data() -> () {
-
-    let z = build_pool(); // Our pool. For this ex, build from static info shown above
-    let mut conn = z.get_conn().unwrap(); // Get a connection to the pool
-
-    let mut all_returns: Vec<Vec<String>> = Vec::new();
-    let mut account_data_vec: Vec<AccountDataArchive> = Vec::new();
-    let params = format!("INSERT INTO `account_data_archive` (network, network_id, network_username,
-         follower_count, correlation_id, archive_id, type_id)
-         VALUES ('twitter', '1234567',
-         'black_mamba', '15555', '1X567V34M', '1','2')");
-
-    conn.query(params).map(|query_result| {
-         for row in query_result {
-            let unwrapped =  row.unwrap().unwrap();
-            let mut row_returns: Vec<String> = Vec::new();
-        }
-    });
-}
-
-pub fn get_account_data_by_id(identifier: &str) -> Vec<AccountDataArchive> {
-    get_account_data_by_param("id", identifier)
-}
-
+/*******************************************************/
+/******************* Tests & Sandbox ******************/
+/*****************************************************/
 fn main() {
-    // get_account_data_by_param("id", "1");
-    // get_account_data_by_id("1");
-    post_account_data_by_param();
-    // server::start_server();
+    let pool: Pool = yoursql::build_pool("127.0.0.1", "ip_brolytics", "root", 3306);
+
+    let table: String = String::from("account_data_archive");
+    let mut tuple_vec: Vec<(String, String)> = Vec::new();
+        tuple_vec.push(("network".to_string(), "twitter".to_string()));
+        tuple_vec.push(("network_id".to_string(), "8964323".to_string()));
+        tuple_vec.push(("network_username".to_string(), "jimbo".to_string()));
+        tuple_vec.push(("follower_count".to_string(), "456733".to_string()));
+        tuple_vec.push(("correlation_id".to_string(), "89J6X43C23".to_string()));
+        tuple_vec.push(("archive_id".to_string(), "1".to_string()));
+        tuple_vec.push(("type_id".to_string(), "2".to_string()));
+
+    yoursql::basic_write_to_table(table, tuple_vec, pool);
+
+    let bill: SomePerson = SomePerson {
+        name: "Patrick".to_string(),
+        age: 31
+    };
 }
