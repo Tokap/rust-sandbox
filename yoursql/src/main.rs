@@ -9,11 +9,15 @@ use mysql::{Pool};
 
 mod patsql;
 
+use patsql::write::{json_write_to_table};
+use patsql::pool::{build_pool};
+use patsql::read::{get_by_param};
+
 fn main() {
 
     let test_json: String = "{\"network\":\"twitter\",\"network_id\":\"1713789122\",\"network_username\":\"buck_johnson\",\"follower_count\":\"851196\",\"correlation_id\":\"97a2e620-6d45-46bb-bf16-5c2c6082897d\",\"archive_id\":\"2\",\"type_id\":\"2\"}".to_string();
 
-    let pool: Pool = patsql::build_pool("127.0.0.1", "ip_brolytics", "root", 3306);
+    let pool: Pool = build_pool("127.0.0.1", "ip_brolytics", "root", 3306);
 
     let table: String = String::from("account_data_archive");
 
@@ -29,9 +33,9 @@ fn main() {
     // let print_statement: String = patsql::simple_json_insert(table, test_json);
     // println!("My Print String Looks Like: {:?}",print_statement);
 
-    let my_return = patsql::json_write_to_table(table, test_json, pool);
-    println!("My RETURN: {:?}", my_return);
+    // let my_return = json_write_to_table(table, test_json, pool);
+    // println!("My RETURN: {:?}", my_return);
 
-    // let return_value: String = patsql::get_by_param("id", "1", "account_data_archive", pool);
-    // println!("My Outcome Looks Like: {:?}",return_value);
+    let return_value: String = get_by_param("id", "1", "account_data_archive", pool);
+    println!("My Outcome Looks Like: {}",return_value);
 }
