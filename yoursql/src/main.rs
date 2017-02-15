@@ -36,6 +36,6 @@ fn main() {
     // let my_return = json_write_to_table(table, test_json, pool);
     // println!("My RETURN: {:?}", my_return);
 
-    let return_value: String = get_by_param("id", "1", "account_data_archive", pool);
-    println!("My Outcome Looks Like: {}",return_value);
+    let return_value: String = get_by_param("id", "1", "account_data_archive", pool).unwrap();
+    println!("My Outcome Looks Like: {:?}",return_value);
 }

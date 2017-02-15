@@ -55,3 +55,48 @@ pub fn get_table_json_by_param(
     // altenatively, we can make the json string outside of the loop scope and return just that
     // Please note that such a method would not support conditions with multiple returns
 }
+
+
+/*******************************************************/
+/******** Attempt at nested maps & conversions ********/
+/*****************************************************/
+
+// #[allow(dead_code)]
+// pub fn get_by_param_with_handling(
+//     param: &str,
+//     identifier: &str,
+//     table: &str,
+//     pool: Pool,) -> String {
+//         let mut conn = pool.get_conn().unwrap();
+//
+//         let mut all_row_values: Vec<Vec<String>> = Vec::new();
+//         let mut return_array = json::JsonValue::new_array();
+//
+//         let sql = format!("SELECT * FROM `{}` WHERE `{}`={}", table, param, identifier);
+//
+//         // let col_name_vec: Vec<String> = get_col_names(&query_result);
+//         // : Result<String, String>
+//         let ending_result =
+//         conn.query(sql)
+//         .map_err(|e| e.to_string())
+//         .map(|mut query_result| {
+//             // println!("My thing: {:?}", query_result);
+//             query_result.map(|x| x.unwrap()).map(|row| {
+//                 let x: String = from_row(row.clone());
+//                 println!("Moded X Var: {:?}", x);
+//
+//                 // println!("From Row: {:?}", x);
+//                 row
+//                 // row.unwrap().unwrap().into_iter().map(|unwrapped| {
+//                 //     println!("My thing: {:?}", unwrapped.into_str());
+//                 //     // println!("Col Names: {:?}", col_name_vec);
+//                 //     unwrapped.into_str();
+//                 // })
+//             })
+//
+//         });
+//
+//         println!("Moded Conn Var: {:?}", ending_result);
+//
+//         "return_array".to_string()
+// }

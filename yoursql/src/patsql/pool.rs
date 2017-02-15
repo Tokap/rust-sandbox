@@ -1,6 +1,6 @@
 #![feature(use_extern_macros)]
 
-use mysql::{OptsBuilder, Pool, QueryResult};
+use mysql::{OptsBuilder, Pool};
 use json;
 
 /*******************************************************/

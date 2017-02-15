@@ -1,4 +1,4 @@
-use mysql::{OptsBuilder, Pool, QueryResult};
+use mysql::{OptsBuilder, Pool, QueryResult, from_row};
 use json;
 
 /*******************************************************/
@@ -32,16 +32,19 @@ pub fn get_by_param(
     param: &str,
     identifier: &str,
     table: &str,
-    pool: Pool,) -> String {
+    pool: Pool,) -> Result<String, String> {
 
         let mut conn = pool.get_conn().unwrap();
 
         let mut return_array = json::JsonValue::new_array();
         let mut all_row_values: Vec<Vec<String>> = Vec::new();
+        let mut conn_error: String = String::from("");
 
-        let params = format!("SELECT * FROM `{}` WHERE `{}`={}", table, param, identifier);
+        let sql = format!("SELECT * FROM `{}` WHERE `{}`={}", table, param, identifier);
 
-        conn.query(params).map(|query_result| {
+        conn.query(sql)
+        .map_err(|err| conn_error = err.to_string())
+        .map(|query_result| {
             let col_name_vec: Vec<String> = get_col_names(&query_result);
 
             // Create Vector of Vec<String> holding value on each row w/o keys
@@ -70,7 +73,10 @@ pub fn get_by_param(
             }
         });
 
-        return_array.dump()
+        match conn_error.len() {
+            0   => Ok(return_array.dump()),
+            _ => Err(conn_error),
+        }
 }
 
 //******************************************************/
@@ -81,7 +87,7 @@ pub fn get_by_param(
 pub fn get_json_by_id(
   identifier: &str,
   table: &str,
-  pool: Pool,) -> String {
+  pool: Pool,) -> Result<String, String> {
 
       get_by_param("id", identifier, table, pool)
 }
