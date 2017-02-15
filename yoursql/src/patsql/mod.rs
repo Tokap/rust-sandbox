@@ -38,6 +38,7 @@ pub fn test_and_output_connection(p: Pool) -> bool {
 /***************** Reading from mysql *****************/
 /*****************************************************/
 
+// SUPPORT FN:
 #[allow(dead_code)]
 pub fn get_col_names(query_result: &QueryResult) -> Vec<String> {
 
@@ -158,11 +159,12 @@ pub fn get_by_param(
                 return_array.push(data_object);
             }
         });
+
         return_array.dump()
 }
 
 /*******************************************************/
-/******************* Writing to mysql *****************/
+/************* Manual JSON Creation - Ugly ************/
 /*****************************************************/
 
 // @TODO: Should make a more tailored version that takes json
@@ -223,7 +225,7 @@ pub fn simple_json_insert(
             println!("Key/Value Pairs: {:?}", i);
             println!("Value: {:?}", i.1);
             key_vec.push(i.0.to_string());
-            value_vec.push(i.1.to_string());
+            value_vec.push(format!("'{}'",i.1));
         }
 
         let keys: String = format!("({})", key_vec.join(", "));
@@ -239,8 +241,6 @@ pub struct SqlWriteReturn {
     affected_rows: u64,
     warning_count: u16,
 }
-
-// Result<SqlWriteReturn, String>
 
 #[allow(dead_code)]
 pub fn write_to_table(
@@ -266,7 +266,7 @@ pub fn write_to_table(
  //**************** Combined Functions *****************/
 //*****************************************************/
 #[allow(dead_code)]
-pub fn basic_write_to_table(
+pub fn vec_write_to_table(
     table: String,
     params: Vec<(String, String)>,
     pool: Pool) -> Result<SqlWriteReturn, String> {
@@ -276,7 +276,17 @@ pub fn basic_write_to_table(
 }
 
 #[allow(dead_code)]
-pub fn get_account_json_by_id(
+pub fn json_write_to_table(
+    table: String,
+    params: String,
+    pool: Pool) -> Result<SqlWriteReturn, String> {
+
+        let sql: String = simple_json_insert(table, params);
+        write_to_table(sql, pool)
+}
+
+#[allow(dead_code)]
+pub fn get_json_by_id(
     identifier: &str,
     table: &str,
     pool: Pool,) -> Vec<String> {
