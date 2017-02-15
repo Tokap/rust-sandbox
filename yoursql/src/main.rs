@@ -26,9 +26,12 @@ fn main() {
         tuple_vec.push(("archive_id".to_string(), "1".to_string()));
         tuple_vec.push(("type_id".to_string(), "2".to_string()));
 
-    patsql::simple_json_insert(table, test_json.to_string());    
+    // let print_statement: String = patsql::simple_json_insert(table, test_json.to_string());
+    // println!("My Print String Looks Like: {:?}",print_statement);
 
-    // patsql::basic_write_to_table(table, tuple_vec, pool);
-    let return_value: String = patsql::get_by_param("id", "1", "account_data_archive", pool);
-    println!("My Outcome Looks Like: {:?}",return_value);
+    let my_return = patsql::basic_write_to_table(table, tuple_vec, pool);
+    println!("My RETURN: {:?}", my_return.unwrap());
+
+    // let return_value: String = patsql::get_by_param("id", "1", "account_data_archive", pool);
+    // println!("My Outcome Looks Like: {:?}",return_value);
 }

@@ -203,70 +203,63 @@ pub fn simple_insert_statement(
 
 }
 
-
+/*******************************************************/
+/***************** NEW WRITE FUNCTION  ****************/
+/*****************************************************/
 #[allow(dead_code)]
 pub fn simple_json_insert(
     table: String,
     json: String ) -> String {
 
-        let mut test_vec: Vec<String> = Vec::new();
+        let table_statement: String = format!("INSERT INTO `{}`", table);
+        let mut key_vec: Vec<String> = Vec::new();
+        let mut value_vec: Vec<String> = Vec::new();
+
 
         let json_obj = json::parse(&json).unwrap();
+        let keys_and_values: json::object::Iter = json_obj.entries();
 
-        for i in json_obj.entries() {
+        for i in keys_and_values {
             println!("Key/Value Pairs: {:?}", i);
             println!("Value: {:?}", i.1);
-            test_vec.push(i.1.as_str().unwrap());
+            key_vec.push(i.0.to_string());
+            value_vec.push(i.1.to_string());
         }
 
-        println!("Vec Looks Like: {:?}", test_vec);
+        let keys: String = format!("({})", key_vec.join(", "));
+        let values: String = format!(" VALUES ({})", value_vec.join(", "));
 
-
-
-        let mut table_statement: String = format!("INSERT INTO `{}` ", table);
-        let mut insert_keys: String = String::new();
-        let mut insert_values: String = String::from(" VALUES ");
-
-
-        // for i in 0..params.len() {
-        //
-        //     if i == 0 {
-        //         insert_keys.push_str("( ");
-        //         insert_values.push_str("( ");
-        //     }
-        //
-        //     if i == params.len() - 1 {
-        //         insert_keys.push_str(&format!("{} ", params[i].0)); //key at first point in tuple
-        //         insert_values.push_str(&format!("'{}' ", params[i].1)); // value in second
-        //         insert_keys.push_str(" )");
-        //         insert_values.push_str(" )");
-        //     }
-        //     else {
-        //         insert_keys.push_str(&format!("{}, ", params[i].0)); //key at first point in tuple
-        //         insert_values.push_str(&format!("'{}', ", params[i].1)); // value in second
-        //     }
-        // }
-        //
-        // //combine query pieces
-        // insert_keys.push_str(&insert_values);
-        // table_statement.push_str(&insert_keys);
-        //
-        // table_statement
-        "some return".to_string()
+        [table_statement, keys, values].join(" ") // Return combined statement
 
 }
+
+#[derive(Debug, Default, PartialEq, Eq)]
+pub struct SqlWriteReturn {
+    last_save_id: u64,
+    affected_rows: u64,
+    warning_count: u16,
+}
+
+// Result<SqlWriteReturn, String>
 
 #[allow(dead_code)]
 pub fn write_to_table(
     sql: String,
-    pool: Pool,) -> () {
+    pool: Pool,) -> Result<SqlWriteReturn, String> {
 
         let mut conn = pool.get_conn().unwrap();
 
-        conn.query(sql).map(|query_result| {
-                 println!("Query Results: {:?}", query_result.last_insert_id());
-        }); // Currently, no error handling or confirmation of return
-        // @TODO: should make custom struct with all return details as norm
+        let final_return: Result<SqlWriteReturn, String> = conn.query(sql)
+        .map_err(|e| e.to_string() )
+        .map(|query_result| {
+             SqlWriteReturn {
+                 last_save_id: query_result.last_insert_id(),
+                 affected_rows: query_result.affected_rows(),
+                 warning_count: query_result.warnings(),
+             }
+        });
+
+        final_return
 }
 
   //*****************************************************/
@@ -276,10 +269,10 @@ pub fn write_to_table(
 pub fn basic_write_to_table(
     table: String,
     params: Vec<(String, String)>,
-    pool: Pool) -> () {
+    pool: Pool) -> Result<SqlWriteReturn, String> {
 
         let sql: String = simple_insert_statement(table, params);
-        write_to_table(sql, pool);
+        write_to_table(sql, pool)
 }
 
 #[allow(dead_code)]
