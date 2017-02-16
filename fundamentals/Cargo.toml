@@ -27,7 +27,8 @@ env_logger = "*"
 
 json = "*"
 
+jsonsql = {version = "*", git = "https://github.com/Tokap/jsonsql" }
+
 
 [dependencies.url]
 git = "https://github.com/servo/rust-url"
-jsonsql = "https://github.com/tokap/jsonsql"
