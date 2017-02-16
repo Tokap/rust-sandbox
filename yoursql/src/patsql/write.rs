@@ -104,8 +104,8 @@ pub fn write_to_table(
 
 #[allow(dead_code)]
 pub fn vec_write_to_table(
-    table: String,
     params: Vec<(String, String)>,
+    table: String,
     pool: Pool) -> Result<SqlWriteReturn, String> {
 
         let sql: String = simple_vec_insert(table, params);
@@ -114,8 +114,8 @@ pub fn vec_write_to_table(
 
 #[allow(dead_code)]
 pub fn json_write_to_table(
-    table: String,
     params: String,
+    table: String,
     pool: Pool) -> Result<SqlWriteReturn, String> {
 
         let sql: String = simple_json_insert(table, params);
