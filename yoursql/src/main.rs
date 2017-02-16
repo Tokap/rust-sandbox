@@ -11,7 +11,7 @@ mod patsql;
 
 use patsql::write::{json_write_to_table};
 use patsql::pool::{build_basic_pool, build_pool_json, connection_is_active};
-use patsql::read::{get_by_param, get_by_two_params};
+use patsql::read::{get_by_param, get_by_two_params, get_by_raw};
 
 fn main() {
 
@@ -28,24 +28,15 @@ fn main() {
 
     println!("TEST JSON {:?}", pool_json.dump());
     let pool: Pool = build_basic_pool("127.0.0.1", "ip_brolytics", "root", "", 3306);
-    let new_pool: Pool = build_pool_json(pool_json.dump());
-
+    // let new_pool: Pool = build_pool_json(pool_json.dump());
 
     let table: String = String::from("account_data_archive");
-
-    let mut tuple_vec: Vec<(String, String)> = Vec::new();
-        tuple_vec.push(("network".to_string(), "twitter".to_string()));
-        tuple_vec.push(("network_id".to_string(), "8964323".to_string()));
-        tuple_vec.push(("network_username".to_string(), "jimbo".to_string()));
-        tuple_vec.push(("follower_count".to_string(), "456733".to_string()));
-        tuple_vec.push(("correlation_id".to_string(), "89J6X43C23".to_string()));
-        tuple_vec.push(("archive_id".to_string(), "1".to_string()));
-        tuple_vec.push(("type_id".to_string(), "2".to_string()));
-
+    let sql: String = String::from("SELECT * FROM `account_data_archive`");
+    let return_value: String = get_by_raw(sql, pool).unwrap();
     // let print_statement: String = patsql::simple_json_insert(table, test_json);
     // println!("My Print String Looks Like: {:?}",print_statement);
 
     // let return_value: String = get_by_param("id", "1", "account_data_archive", pool).unwrap();
-    let return_value: String = get_by_param("id", "2", "account_data_archive", pool).unwrap();
-    println!("My Outcome Looks Like: {:?}",return_value);
+    // let return_value: String = get_by_param("id", "2", "account_data_archive", pool).unwrap();
+    println!("My Outcome Looks Like: {}",return_value);
 }

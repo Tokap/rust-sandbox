@@ -119,7 +119,7 @@ pub fn get_by_two_params(
 }
 
 #[allow(dead_code)]
-pub fn get_json_by_id(
+pub fn get_by_id(
   search_value: &str,
   table: &str,
   pool: Pool,) -> Result<String, String> {
