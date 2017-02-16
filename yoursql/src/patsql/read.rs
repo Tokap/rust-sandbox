@@ -1,4 +1,4 @@
-use mysql::{OptsBuilder, Pool, QueryResult, from_row};
+use mysql::{Pool, QueryResult};
 use json;
 
 /*******************************************************/
@@ -27,11 +27,26 @@ pub fn get_col_names(query_result: &QueryResult) -> Vec<String> {
 /**************** Main Read Function  *****************/
 /*****************************************************/
 
+pub fn make_get_statement(
+    search_key: &str,
+    search_value: &str,
+    table: &str,) -> String {
+
+        format!("SELECT * FROM `{}` WHERE `{}`='{}'", table, search_key, search_value)
+}
+
+pub fn make_get_statement_2(
+    search_cond_one: (&str, &str),
+    search_cond_two: (&str, &str),
+    table: &str,) -> String {
+
+        format!("SELECT * FROM `{}` WHERE `{}`='{}' AND `{}`='{}'",
+        table, search_cond_one.0, search_cond_one.1, search_cond_two.0, search_cond_two.1)
+}
+
 #[allow(dead_code)]
-pub fn get_by_param(
-    param: &str,
-    identifier: &str,
-    table: &str,
+pub fn get_by_raw(
+    sql: String,
     pool: Pool,) -> Result<String, String> {
 
         let mut conn = pool.get_conn().unwrap();
@@ -39,8 +54,6 @@ pub fn get_by_param(
         let mut return_array = json::JsonValue::new_array();
         let mut all_row_values: Vec<Vec<String>> = Vec::new();
         let mut conn_error: String = String::from("");
-
-        let sql = format!("SELECT * FROM `{}` WHERE `{}`={}", table, param, identifier);
 
         conn.query(sql)
         .map_err(|err| conn_error = err.to_string())
@@ -84,10 +97,32 @@ pub fn get_by_param(
 //****************************************************/
 
 #[allow(dead_code)]
+pub fn get_by_param(
+    search_key: &str,
+    search_value: &str,
+    table: &str,
+    pool: Pool,) -> Result<String, String> {
+
+        let sql: String = make_get_statement(search_key, search_value, table);
+        get_by_raw(sql, pool)
+}
+
+#[allow(dead_code)]
+pub fn get_by_two_params(
+    search_cond_one: (&str, &str),
+    search_cond_two: (&str, &str),
+    table: &str,
+    pool: Pool,) -> Result<String, String> {
+
+        let sql: String = make_get_statement_2(search_cond_one, search_cond_two, table);
+        get_by_raw(sql, pool)
+}
+
+#[allow(dead_code)]
 pub fn get_json_by_id(
-  identifier: &str,
+  search_value: &str,
   table: &str,
   pool: Pool,) -> Result<String, String> {
 
-      get_by_param("id", identifier, table, pool)
+      get_by_param("id", search_value, table, pool)
 }

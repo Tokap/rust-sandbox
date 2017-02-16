@@ -1,4 +1,4 @@
-use mysql::{OptsBuilder, Pool, QueryResult};
+use mysql::{Pool};
 use json;
 
 /*******************************************************/
@@ -30,8 +30,6 @@ pub fn simple_json_insert(
         let keys_and_values: json::object::Iter = json_obj.entries();
 
         for i in keys_and_values {
-            println!("Key/Value Pairs: {:?}", i);
-            println!("Value: {:?}", i.1);
             key_vec.push(i.0.to_string());
             value_vec.push(format!("'{}'",i.1));
         }
@@ -121,5 +119,13 @@ pub fn json_write_to_table(
     pool: Pool) -> Result<SqlWriteReturn, String> {
 
         let sql: String = simple_json_insert(table, params);
+        write_to_table(sql, pool)
+}
+
+#[allow(dead_code)]
+pub fn raw_write_to_table(
+    sql: String,
+    pool: Pool) -> Result<SqlWriteReturn, String> {
+
         write_to_table(sql, pool)
 }
