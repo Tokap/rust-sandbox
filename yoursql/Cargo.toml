@@ -6,3 +6,11 @@ authors = ["Patrick Allen <allenpatrick86@gmail.com>"]
 [dependencies]
 mysql = "*"
 json  = "*"
+
+net2 = "0.2"
+
+# nix = "*"
+nix = { git = "https://github.com/Tokap/nix-rust", branch = "add-sys-select" }
+
+[dependencies.url]
+git = "https://github.com/servo/rust-url"

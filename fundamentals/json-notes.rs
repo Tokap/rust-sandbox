@@ -10,8 +10,8 @@ data["answer"] = 42.into();
 data["foo"] = "bar".into();
 assert_eq!(data.dump(), r#"{"answer":42,"foo":"bar"}"#);
 
-// data.entries will return key, value pairs
-
+// data.entries() will return key, value pairs
+// data.members() will return each index of an array
 
 // My Stuff:
 let json_string = json::parse(r#"

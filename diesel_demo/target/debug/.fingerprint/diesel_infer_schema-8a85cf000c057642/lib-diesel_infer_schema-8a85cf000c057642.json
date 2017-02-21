@@ -1,0 +1,1 @@
+{"rustc":14806581616236711035,"target":13359771913555370625,"profile":11625325535095225723,"local":{"variant":"Precalculated","fields":["0.11.0"]},"features":"Some([\"diesel\", \"mysql\", \"uses_information_schema\"])","deps":[["diesel v0.11.2",2692567573758417030],["quote v0.3.13",3858498665923044577],["syn v0.11.6",17726018266607753883]],"rustflags":[]}

@@ -1,0 +1,11 @@
+[package]
+name = "diesel_demo"
+version = "0.1.0"
+authors = ["Patrick Allen <allenpatrick86@gmail.com>"]
+
+[dependencies]
+diesel = { version = "0.11.0", features = ["mysql"] }
+diesel_codegen = { version = "0.11.0", features = ["mysql"] }
+dotenv = "*"
+
+# echo DATABASE_URL=mysql://root@localhost/ip_brolytics > .env

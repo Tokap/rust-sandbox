@@ -1,0 +1,2 @@
+cargo:rustc-link-search=native=/usr/local/Cellar/mariadb/10.1.19/lib
+cargo:rustc-link-lib=mysqlclient
